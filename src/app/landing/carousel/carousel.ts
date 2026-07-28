@@ -87,25 +87,24 @@ export class Carousel {
         title: '¡BCP te lleva a París en San Valentín!',
         subtitle: 'Sorteo Exclusivo',
         buttonText: 'Participa aquí',
-        imageBg:
-          'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop',
+        imageBg: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop',
         themeColor: 'bg-[#ff7800] hover:bg-[#e66c00]',
       },
       {
         title: 'Nueva Cuenta de Ahorros Digital',
         subtitle: 'Sin mantenimiento',
         buttonText: 'Abre tu cuenta',
-        imageBg:
-          'https://images.unsplash.com/photo-1616077168712-fc6c738ae826?q=80&w=2069&auto=format&fit=crop',
         themeColor: 'bg-[#ff7800] hover:bg-[#e66c00]',
+        rightImage: 'assets/img/Banner-Hero_Mobile.png',
+        bgColor: '#002a8d',
       },
       {
         title: 'Adelanta tu sueldo al instante',
         subtitle: 'Beneficio Cuenta Sueldo',
         buttonText: 'Pídelo ya',
-        imageBg:
-          'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=2070&auto=format&fit=crop',
         themeColor: 'bg-[#ff7800] hover:bg-[#e66c00]',
+        rightImage: 'assets/img/Vitrina-Home-BCP_Campaña-Masiva-09.07_Desk.png',
+        bgColor: '#1e293b',
       },
     ],
     pymes: [

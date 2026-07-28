@@ -93,7 +93,7 @@ export class Promotions {
       title: '¡Opera desde cualquier lugar con TLC Móvil BCP!',
       description: 'Consulta tus saldos y movimientos, firma y envía tus operaciones, y registra tus Transferencias BCP, todo desde la comodidad de tu celular. Disponible en Google Play Store y App Store.',
       buttonText: 'Conoce más',
-      image: 'assets/img/tlc-movil.png',
+      image: 'assets/img/telecredito.jpg',
       link: '#'
     },
     {
@@ -101,7 +101,7 @@ export class Promotions {
       title: 'Tracking de Operaciones en TLC Móvil',
       description: '¡Ya puedes ver el tracking de tus operaciones desde Telecrédito móvil! Monitorea el estado de tus transferencias y pagos en tiempo real desde tu celular.',
       buttonText: 'Afíliate aquí',
-      image: 'assets/img/tracking-operaciones.png',
+      image: 'assets/img/tracking-tlc.png',
       link: '#'
     },
     {
@@ -109,7 +109,7 @@ export class Promotions {
       title: 'Paga tus servicios por la App Banca Móvil BCP',
       description: 'Realiza el pago de todos tus servicios de forma rápida y segura desde la aplicación. Ahorra tiempo y gestiona los pagos de tu empresa desde cualquier lugar.',
       buttonText: 'Conoce más',
-      image: 'assets/img/pago-servicios.png',
+      image: 'assets/img/pago-servicios-desktop.png',
       link: '#'
     }
   ]);
