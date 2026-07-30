@@ -1,0 +1,13 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-[#002a8d]">Pagos</h1>
+      <p class="text-sm text-[#8a99af] mt-1">Administra tus pagos de servicios</p>
+    </div>
+    <a routerLink="/dashboard/overview" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">
+      ← Volver
+    </a>
+  </div>
+
+  <bcp-pending-payments [pagos]="data()?.pagosPendientes ?? []" />
+</div>

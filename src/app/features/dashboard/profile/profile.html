@@ -1,0 +1,48 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-[#002a8d]">Mi Perfil</h1>
+      <p class="text-sm text-[#8a99af] mt-1">Información personal de tu cuenta</p>
+    </div>
+    <a routerLink="/dashboard/overview" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">
+      ← Volver
+    </a>
+  </div>
+
+  @if (user(); as u) {
+    <bcp-card padding="lg" rounded="2xl" shadow="sm">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-16 h-16 rounded-full bg-[#002a8d] flex items-center justify-center">
+          <span class="text-white text-2xl font-bold">{{ u.nombre.charAt(0).toUpperCase() }}</span>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-[#002a8d]">{{ u.nombre }}</h2>
+          <p class="text-sm text-[#8a99af]">Cliente BCP</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <p class="text-xs text-[#8a99af] uppercase tracking-wide font-semibold mb-1">Nombre de Usuario</p>
+          <p class="text-[#002a8d] font-medium">{{ u.nombre }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-[#8a99af] uppercase tracking-wide font-semibold mb-1">DNI</p>
+          <p class="text-[#002a8d] font-medium">{{ u.dni }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-[#8a99af] uppercase tracking-wide font-semibold mb-1">Correo Electrónico</p>
+          <p class="text-[#002a8d] font-medium">{{ u.correo }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-[#8a99af] uppercase tracking-wide font-semibold mb-1">Teléfono</p>
+          <p class="text-[#002a8d] font-medium">{{ u.telefono }}</p>
+        </div>
+        <div class="sm:col-span-2">
+          <p class="text-xs text-[#8a99af] uppercase tracking-wide font-semibold mb-1">Dirección</p>
+          <p class="text-[#002a8d] font-medium">{{ u.direccion }}</p>
+        </div>
+      </div>
+    </bcp-card>
+  }
+</div>

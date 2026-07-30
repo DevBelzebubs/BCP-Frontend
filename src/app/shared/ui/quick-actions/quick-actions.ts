@@ -1,0 +1,38 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+interface QuickAction {
+  label: string;
+  icon: string;
+  route: string;
+}
+
+@Component({
+  selector: 'bcp-quick-actions',
+  imports: [CommonModule],
+  templateUrl: './quick-actions.html',
+})
+export class BcpQuickActions {
+  protected actions: QuickAction[] = [
+    {
+      label: 'Transferir',
+      icon: 'transfer',
+      route: '/dashboard/transfer',
+    },
+    {
+      label: 'Pagar Servicios',
+      icon: 'pay',
+      route: '/dashboard/payments',
+    },
+    {
+      label: 'Solicitar Préstamo',
+      icon: 'loan',
+      route: '/dashboard/loans',
+    },
+    {
+      label: 'Ver Movimientos',
+      icon: 'movements',
+      route: '/dashboard/accounts',
+    },
+  ];
+}

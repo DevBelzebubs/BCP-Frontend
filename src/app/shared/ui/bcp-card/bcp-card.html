@@ -1,0 +1,7 @@
+<div class="bg-white border border-gray-100"
+     [class]="paddingClass() + ' ' + hoverClass() + ' ' + roundedClass() + ' ' + shadowClass()">
+  @if (accentBar()) {
+    <div class="h-1 w-full bg-gradient-to-r from-[#002a8d] to-[#0051ff] -mt-[1px] rounded-t-[inherit]"></div>
+  }
+  <ng-content />
+</div>

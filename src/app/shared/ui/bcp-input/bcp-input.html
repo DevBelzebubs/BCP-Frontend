@@ -1,0 +1,13 @@
+<div>
+  @if (label()) {
+    <label [for]="id() || name()" class="block text-sm font-semibold text-gray-700 mb-1.5">{{ label() }}</label>
+  }
+  <div class="relative">
+    <input [id]="id() || name()" [name]="name()"
+           [type]="type()" [placeholder]="placeholder()"
+           [disabled]="disabled()" [attr.maxlength]="maxlength()"
+           [(ngModel)]="value" (blur)="onBlur.emit($event)"
+           [class]="inputClasses()">
+    <ng-content select="[slot=right]" />
+  </div>
+</div>

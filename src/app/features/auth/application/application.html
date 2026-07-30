@@ -1,0 +1,118 @@
+<header class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="container mx-auto px-4 xl:px-8 flex items-center h-16">
+    <a routerLink="/" class="flex items-center gap-3 group">
+      <img src="assets/img/bcp-logo.png" alt="BCP" class="h-8">
+    </a>
+    <h1 class="ml-6 text-[#002a8d] font-bold text-lg">Abrir Cuenta</h1>
+  </div>
+</header>
+
+<section class="relative w-full h-[400px] lg:h-[500px] overflow-hidden bg-gray-900 group">
+  @if (carouselSlides[currentSlideIndex()]; as slide) {
+    <div class="absolute inset-0 z-0 animate-fade-in"
+         [style.background-image]="'url(' + slide.imageBg + ')'"
+         style="background-size: cover; background-position: center;">
+      <div class="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-gray-900/40 to-transparent"></div>
+    </div>
+  }
+
+  <div class="container mx-auto px-4 xl:px-8 relative z-10 h-full flex items-center">
+    <div class="max-w-2xl text-white animate-fade-in">
+      <span class="inline-block py-1 px-3 rounded-md bg-white/20 backdrop-blur-sm text-sm font-semibold mb-4 border border-white/30">
+        {{ carouselSlides[currentSlideIndex()].subtitle }}
+      </span>
+      <h2 class="text-4xl md:text-5xl font-bold leading-tight mb-4 drop-shadow-lg">
+        {{ carouselSlides[currentSlideIndex()].title }}
+      </h2>
+      <p class="text-lg text-gray-200 mb-8 max-w-lg">
+        {{ carouselSlides[currentSlideIndex()].description }}
+      </p>
+      <a routerLink="/register/apply"
+         [queryParams]="{ tipo: currentSlideIndex() === 0 ? 'AHORROS' : 'CORRIENTE' }"
+         class="inline-block px-8 py-4 rounded-full font-bold text-lg shadow-lg transition-transform hover:scale-105 text-white no-underline"
+         [ngClass]="carouselSlides[currentSlideIndex()].themeColor">
+        Abrir cuenta
+      </a>
+    </div>
+  </div>
+
+  <button (click)="prevSlide()"
+          class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/30 text-white p-3 rounded-full backdrop-blur-md transition-all opacity-0 group-hover:opacity-100 z-20">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+
+  <button (click)="nextSlide()"
+          class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/30 text-white p-3 rounded-full backdrop-blur-md transition-all opacity-0 group-hover:opacity-100 z-20">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
+
+  <div class="absolute bottom-8 left-0 w-full flex justify-center gap-3 z-20">
+    @for (slide of carouselSlides; track $index) {
+      <button (click)="goToSlide($index)"
+              class="w-3 h-3 rounded-full transition-all duration-300"
+              [ngClass]="{
+                'bg-white scale-125': currentSlideIndex() === $index,
+                'bg-white/40 hover:bg-white/60': currentSlideIndex() !== $index
+              }">
+      </button>
+    }
+  </div>
+</section>
+
+<section class="py-16 lg:py-20 bg-gradient-to-b from-white to-blue-50">
+  <div class="container mx-auto px-4 xl:px-8">
+    <h2 class="text-3xl md:text-[36px] font-bold text-[#002a8d] text-center mb-12">
+      ¿Qué tipo de cuenta necesitas?
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+      @for (account of accountTypes; track account.tipo) {
+        <div class="group bg-white rounded-[20px] p-6 lg:p-8 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
+          <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-5 group-hover:bg-[#ff7800] group-hover:text-white transition-colors">
+            @switch (account.iconName) {
+              @case ('piggy') {
+                <svg class="h-8 w-8 text-[#002a8d] group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              }
+              @case ('card') {
+                <svg class="h-8 w-8 text-[#002a8d] group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg>
+              }
+              @case ('money') {
+                <svg class="h-8 w-8 text-[#002a8d] group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              }
+              @case ('chart') {
+                <svg class="h-8 w-8 text-[#002a8d] group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+              }
+            }
+          </div>
+
+          <h3 class="text-[#002a8d] font-bold text-lg mb-3">{{ account.title }}</h3>
+          <p class="text-[#5c697a] text-sm leading-relaxed mb-6">{{ account.description }}</p>
+
+          <a routerLink="/register/apply"
+             [queryParams]="{ tipo: account.tipo }"
+             class="mt-auto w-full py-3 rounded-full border-2 border-[#002a8d] text-[#002a8d] font-bold text-sm hover:bg-[#002a8d] hover:text-white transition-colors text-center no-underline block">
+            Abrir cuenta
+          </a>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<footer class="bg-[#002a8d] text-white py-8">
+  <div class="container mx-auto px-4 xl:px-8 text-center">
+    <p class="text-sm opacity-80">&copy; 2026 Banco de Cr&eacute;dito del Per&uacute;. Todos los derechos reservados.</p>
+  </div>
+</footer>

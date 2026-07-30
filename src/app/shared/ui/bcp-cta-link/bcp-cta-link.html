@@ -1,0 +1,11 @@
+<a [href]="href()"
+   class="group inline-flex items-center gap-2 text-[#ff7800] font-semibold text-sm hover:text-[#e66c00] transition-colors w-fit">
+  @if (text()) {
+    {{ text() }}
+  } @else {
+    <ng-content />
+  }
+  <svg class="h-4 w-4 transform transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+  </svg>
+</a>
