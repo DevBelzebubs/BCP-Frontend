@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 interface QuickAction {
   label: string;
@@ -9,7 +10,7 @@ interface QuickAction {
 
 @Component({
   selector: 'bcp-quick-actions',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './quick-actions.html',
 })
 export class BcpQuickActions {

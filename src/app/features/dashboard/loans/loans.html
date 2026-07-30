@@ -1,22 +1,115 @@
 <div class="space-y-6">
-  <div class="flex items-center justify-between">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
     <div>
       <h1 class="text-2xl font-bold text-[#002a8d]">Préstamos</h1>
       <p class="text-sm text-[#8a99af] mt-1">Solicita y administra tus préstamos</p>
     </div>
     <a routerLink="/dashboard/overview" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">
-      ← Volver
+      ← Volver al Resumen
     </a>
   </div>
 
-  <bcp-card padding="lg" rounded="2xl" shadow="sm">
-    <div class="flex flex-col items-center justify-center py-12 text-center">
-      <svg class="h-16 w-16 text-[#8a99af] mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-      <h3 class="text-xl font-bold text-[#002a8d] mb-2">¿Necesitas un préstamo?</h3>
-      <p class="text-[#5c697a] mb-6 max-w-md">Solicita tu préstamo personal de forma rápida y segura. Sujeto a evaluación crediticia.</p>
-      <bcp-button variant="primary" size="md">Solicitar Préstamo</bcp-button>
+  <!-- Card 1: Hero + Indicadores -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+    <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+      <div class="w-16 h-16 rounded-full bg-orange-50 flex items-center justify-center shrink-0">
+        <svg class="h-8 w-8 text-[#ff7800]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-[#002a8d]">¿Necesitas un préstamo?</h2>
+        <p class="text-[#5c697a] mt-1">Solicita tu préstamo personal de forma rápida y segura. Sujeto a evaluación crediticia.</p>
+      </div>
     </div>
-  </bcp-card>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+      <div class="bg-gray-50 rounded-xl p-4 text-center border border-gray-100">
+        <p class="text-2xl font-bold text-[#002a8d]">12.5%</p>
+        <p class="text-xs text-[#8a99af] mt-1">Tasa fija anual</p>
+      </div>
+      <div class="bg-gray-50 rounded-xl p-4 text-center border border-gray-100">
+        <p class="text-2xl font-bold text-[#002a8d]">S/ 50,000</p>
+        <p class="text-xs text-[#8a99af] mt-1">Financiamiento máx.</p>
+      </div>
+      <div class="bg-gray-50 rounded-xl p-4 text-center border border-gray-100">
+        <p class="text-2xl font-bold text-[#002a8d]">60 meses</p>
+        <p class="text-xs text-[#8a99af] mt-1">Plazo máximo</p>
+      </div>
+      <div class="bg-gray-50 rounded-xl p-4 text-center border border-gray-100">
+        <p class="text-2xl font-bold text-[#78be20]">S/ 0</p>
+        <p class="text-xs text-[#8a99af] mt-1">Sin comisión</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2: Beneficios -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+    <div class="flex items-center gap-2 mb-5">
+      <svg class="h-5 w-5 text-[#0051ff]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg>
+      <h3 class="text-lg font-bold text-[#002a8d]">Beneficios</h3>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="flex items-start gap-3 p-3 rounded-xl bg-gray-50">
+        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+          <svg class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-[#002a8d]">Aprobación rápida</p>
+          <p class="text-xs text-[#8a99af]">Respuesta en menos de 24 horas</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 p-3 rounded-xl bg-gray-50">
+        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+          <svg class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-[#002a8d]">Sin penalidad</p>
+          <p class="text-xs text-[#8a99af]">Pago adelantado sin costo adicional</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 p-3 rounded-xl bg-gray-50">
+        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+          <svg class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-[#002a8d]">Desembolso inmediato</p>
+          <p class="text-xs text-[#8a99af]">El mismo día de la aprobación</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 p-3 rounded-xl bg-gray-50">
+        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+          <svg class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-[#002a8d]">Sin comisiones</p>
+          <p class="text-xs text-[#8a99af]">0% de comisión por desembolso</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3: CTA -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <h3 class="text-lg font-bold text-[#002a8d]">¿Listo para solicitar?</h3>
+        <p class="text-sm text-[#5c697a] mt-1">Simula tu cuota o inicia tu solicitud ahora</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+        <bcp-button variant="outline-gray" size="md">Simular Cuota</bcp-button>
+        <bcp-button variant="primary" size="md">Solicitar Préstamo</bcp-button>
+      </div>
+    </div>
+    <p class="text-xs text-[#8a99af] mt-4 text-center sm:text-left">TCEA: 18.5% — Consulta tarifario en agencias y bcp.com.pe</p>
+  </div>
 </div>

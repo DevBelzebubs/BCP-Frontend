@@ -1,0 +1,28 @@
+<div class="space-y-6">
+  <div class="bg-gradient-to-r from-[#002a8d] to-[#0051ff] rounded-2xl p-6 text-white">
+    <h1 class="text-2xl font-bold">Bienvenido, {{ userName }}</h1>
+    <p class="text-white/70 mt-1">Panel de Asesor de Créditos</p>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <a routerLink="/dashboard/asesor/loans" class="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-lg transition-all group">
+      <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+        <svg class="w-6 h-6 text-[#0051ff]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        </svg>
+      </div>
+      <h3 class="font-bold text-[#002a8d] text-sm">Solicitudes de Crédito</h3>
+      <p class="text-xs text-[#8a99af] mt-1">Revisar, aprobar o rechazar solicitudes</p>
+    </a>
+
+    <a routerLink="/dashboard/asesor/reports" class="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-lg transition-all group">
+      <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+        <svg class="w-6 h-6 text-[#ff7800]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      </div>
+      <h3 class="font-bold text-[#002a8d] text-sm">Reporte Diario</h3>
+      <p class="text-xs text-[#8a99af] mt-1">Generar reporte diario de operaciones</p>
+    </a>
+  </div>
+</div>

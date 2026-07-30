@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 export class BcpInput {
   label = input<string>('');
   placeholder = input<string>('');
-  type = input<'text' | 'email' | 'tel'>('text');
+  type = input<string>('text');
   disabled = input(false);
   hasError = input(false);
   hasSuccess = input(false);
@@ -20,7 +20,7 @@ export class BcpInput {
   name = input<string>('');
   id = input<string>('');
 
-  value = model<string>('');
+  value = model<string | number>('');
   onBlur = output<FocusEvent>();
 
   protected inputClasses = computed(() => {

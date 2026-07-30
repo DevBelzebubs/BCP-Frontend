@@ -1,17 +1,102 @@
 <div class="space-y-6">
-  <div class="flex items-center justify-between">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
     <div>
       <h1 class="text-2xl font-bold text-[#002a8d]">Mis Cuentas</h1>
       <p class="text-sm text-[#8a99af] mt-1">Administra tus cuentas y revisa tus movimientos</p>
     </div>
     <a routerLink="/dashboard/overview" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">
-      ← Volver
+      ← Volver al Resumen
     </a>
   </div>
 
-  <div class="space-y-4">
-    @for (cuenta of data()?.cuentas ?? []; track cuenta.idCuenta) {
-      <bcp-account-card [account]="cuenta" />
+  @if (data()) {
+    <!-- Stat bar -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="bg-white rounded-2xl shadow-sm p-4 border border-gray-100">
+        <p class="text-xs text-[#8a99af] mb-1">Movimientos este mes</p>
+        <p class="text-xl font-bold text-[#002a8d]">{{ movimientosMesTotal() }}</p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm p-4 border border-gray-100">
+        <p class="text-xs text-[#8a99af] mb-1">Cuenta con mayor saldo</p>
+        @if (cuentaMayorSaldo(); as c) {
+          <p class="text-xl font-bold text-[#002a8d]">{{ tipoLabels[c.tipo] || c.tipo }}</p>
+          <p class="text-xs text-[#8a99af] font-mono mt-0.5">{{ formatSaldo(c.saldo) }}</p>
+        } @else {
+          <p class="text-xl font-bold text-[#8a99af]">—</p>
+        }
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm p-4 border border-gray-100">
+        <p class="text-xs text-[#8a99af] mb-1">Último movimiento</p>
+        @if (ultimoMovimiento(); as m) {
+          <p class="text-xl font-bold text-[#002a8d]">{{ m.fecha | date:'dd MMM' }}</p>
+          <p class="text-xs text-[#8a99af] mt-0.5">{{ m.tipo === 'DEPOSITO' ? 'Depósito' : m.tipo === 'RETIRO' ? 'Retiro' : m.tipo }} — {{ formatSaldo(m.monto) }}</p>
+        } @else {
+          <p class="text-xl font-bold text-[#8a99af]">—</p>
+        }
+      </div>
+    </div>
+
+    <div class="bg-gradient-to-r from-[#002a8d] to-[#0051ff] rounded-2xl p-5 sm:p-6 text-white">
+      <p class="text-white/70 text-sm mb-1">Saldo Consolidado</p>
+      <p class="text-3xl font-bold font-mono tracking-wider">{{ total() }}</p>
+    </div>
+
+    @if (tipos().length > 1) {
+      <div class="flex gap-2 overflow-x-auto pb-1">
+        <button (click)="setFilter(null)"
+                class="px-4 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap"
+                [class.bg-[#002a8d]]="filterTipo() === null"
+                [class.text-white]="filterTipo() === null"
+                [class.bg-gray-100]="filterTipo() !== null"
+                [class.text-[#5c697a]]="filterTipo() !== null">
+          Todas
+        </button>
+        @for (t of tipos(); track t) {
+          <button (click)="setFilter(t)"
+                  class="px-4 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap"
+                  [class.bg-[#002a8d]]="filterTipo() === t"
+                  [class.text-white]="filterTipo() === t"
+                  [class.bg-gray-100]="filterTipo() !== t"
+                  [class.text-[#5c697a]]="filterTipo() !== t">
+            {{ { AHORROS: 'Ahorros', CORRIENTE: 'Corriente', CUENTA_SUELDO: 'Sueldo', PLAZO_FIJO: 'Plazo Fijo' }[t] ?? t }}
+          </button>
+        }
+      </div>
     }
-  </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      @for (cuenta of filteredCuentas(); track cuenta.idCuenta) {
+        <bcp-account-card [account]="cuenta">
+          <div card-actions class="flex items-center gap-2 mt-4 pt-4 border-t border-gray-100">
+            <button class="flex items-center gap-1.5 text-xs text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">
+              <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Descargar Estado
+            </button>
+            <span class="text-gray-200">|</span>
+            <button class="flex items-center gap-1.5 text-xs text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">
+              <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              Ver detalle
+            </button>
+            <span class="text-gray-200">|</span>
+            <button class="flex items-center gap-1.5 text-xs text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">
+              <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
+              Transferir
+            </button>
+          </div>
+        </bcp-account-card>
+      }
+      @if (filteredCuentas().length === 0) {
+        <div class="bg-white rounded-2xl border border-gray-100 p-10 text-center">
+          <p class="text-[#8a99af]">No hay cuentas en esta categoría</p>
+        </div>
+      }
+    </div>
+  }
 </div>

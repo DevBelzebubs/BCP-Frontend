@@ -78,4 +78,8 @@ export class DashboardService {
     this.loading.set(false);
     this.error.set(null);
   }
+
+  refresh(): void {
+    this.getDashboard().subscribe();
+  }
 }

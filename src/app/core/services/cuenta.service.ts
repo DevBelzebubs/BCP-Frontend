@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { API_ENDPOINTS } from '../config/api.config';
+import { API_URL, API_ENDPOINTS } from '../config/api.config';
 
 export interface AbrirCuentaPayload {
   dni: string;
@@ -13,17 +13,31 @@ export interface AbrirCuentaPayload {
   direccion?: string;
 }
 
+export interface TransferenciaRequest {
+  idCuentaDestino: number;
+  monto: number;
+}
+
+export interface TransferirResponse {
+  idTransaccion: string;
+}
+
+
 @Injectable({
   providedIn: 'root',
 })
 export class CuentaService {
-
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   abrirCuenta(data: AbrirCuentaPayload): Observable<any> {
-    return this.http.post<any>(
-      API_ENDPOINTS.cuentas.abrirCuenta,
-      data
-    );
+    return this.http.post<any>(API_ENDPOINTS.cuentas.abrirCuenta, data);
+  }
+
+  iniciarTransferencia(cuentaOrigenId: number, data: TransferenciaRequest): Observable<any> {
+    return this.http.post(`${API_URL}/api/cuentas/${cuentaOrigenId}/transferir`, data);
+  }
+
+  confirmarTransferencia(data: Record<string, string>): Observable<any> {
+    return this.http.post(`${API_URL}/api/cuentas/confirmar-transferencia`, data);
   }
 }

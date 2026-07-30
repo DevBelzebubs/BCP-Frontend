@@ -1,0 +1,30 @@
+<div class="space-y-6">
+  <div class="bg-gradient-to-r from-[#002a8d] to-[#0051ff] rounded-2xl p-6 text-white">
+    <h1 class="text-2xl font-bold">Panel de Administración</h1>
+    <p class="text-white/70 mt-1">Bienvenido, {{ userName }}</p>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <a routerLink="/dashboard/admin/users" class="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-lg transition-all group">
+      <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+        <svg class="w-6 h-6 text-[#0051ff]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" /></svg>
+      </div>
+      <h3 class="font-bold text-[#002a8d] text-sm">Usuarios</h3>
+      <p class="text-xs text-[#8a99af] mt-1">Gestionar roles de empleados</p>
+    </a>
+    <a routerLink="/dashboard/admin/audit-roles" class="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-lg transition-all group">
+      <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+        <svg class="w-6 h-6 text-[#ff7800]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+      </div>
+      <h3 class="font-bold text-[#002a8d] text-sm">Auditoría Roles</h3>
+      <p class="text-xs text-[#8a99af] mt-1">Historial de cambios de rol</p>
+    </a>
+    <a routerLink="/dashboard/admin/audit-financial" class="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-lg transition-all group">
+      <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+        <svg class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6v12h18V6H3zm3 3h12M6 12h12" /></svg>
+      </div>
+      <h3 class="font-bold text-[#002a8d] text-sm">Auditoría Financiera</h3>
+      <p class="text-xs text-[#8a99af] mt-1">Registro de auditoría financiera</p>
+    </a>
+  </div>
+</div>

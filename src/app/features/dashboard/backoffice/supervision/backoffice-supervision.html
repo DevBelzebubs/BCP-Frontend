@@ -1,0 +1,51 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <div>
+      <h1 class="text-2xl font-bold text-[#002a8d]">Supervisión</h1>
+      <p class="text-sm text-[#8a99af] mt-1">Operaciones del día y reportes</p>
+    </div>
+    <div class="flex gap-2">
+      <button (click)="descargarReporteGlobal()" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium">📄 Reporte Global</button>
+      <a routerLink="/dashboard/backoffice/overview" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium">← Volver</a>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 text-left text-xs text-[#8a99af] uppercase tracking-wider">
+            <th class="px-5 py-3">ID</th>
+            <th class="px-5 py-3">Tipo</th>
+            <th class="px-5 py-3">Fecha</th>
+            <th class="px-5 py-3">Descripción</th>
+            <th class="px-5 py-3">Monto</th>
+            <th class="px-5 py-3">Estado</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @for (op of operaciones(); track op.id) {
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-5 py-3 text-[#002a8d] font-mono">{{ op.id }}</td>
+              <td class="px-5 py-3 text-[#5c697a]">{{ op.tipoOperacion }}</td>
+              <td class="px-5 py-3 text-[#5c697a]">{{ op.fechaHora | date:'short' }}</td>
+              <td class="px-5 py-3 text-[#5c697a]">{{ op.descripcion }}</td>
+              <td class="px-5 py-3 font-mono text-[#002a8d]">S/ {{ op.monto?.toFixed(2) }}</td>
+              <td class="px-5 py-3">
+                <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium"
+                      [class.bg-green-50]="op.estadoActual === 'COMPLETADA'"
+                      [class.text-green-700]="op.estadoActual === 'COMPLETADA'"
+                      [class.bg-yellow-50]="op.estadoActual === 'PENDIENTE'"
+                      [class.text-yellow-700]="op.estadoActual === 'PENDIENTE'">
+                  {{ op.estadoActual }}
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="6" class="px-5 py-10 text-center text-[#8a99af]">No hay operaciones registradas</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

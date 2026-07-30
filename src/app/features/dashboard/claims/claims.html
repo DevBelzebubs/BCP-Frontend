@@ -1,0 +1,137 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <div>
+      <h1 class="text-2xl font-bold text-[#002a8d]">Reclamos</h1>
+      <p class="text-sm text-[#8a99af] mt-1">Registra un reclamo o queja</p>
+    </div>
+    <a routerLink="/dashboard/cliente/overview" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">← Volver al Resumen</a>
+  </div>
+
+  <!-- Info bar -->
+  <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+      <svg class="h-5 w-5 text-[#0051ff]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <div>
+      <p class="text-sm font-medium text-[#002a8d]">¿Sabías que...?</p>
+      <p class="text-xs text-[#5c697a] mt-0.5">El tiempo promedio de respuesta es de 48 horas hábiles. Para emergencias, llama a nuestra central telefónica <strong class="text-[#002a8d]">(01) 311-9898</strong>.</p>
+    </div>
+  </div>
+
+  @if (!success()) {
+    <!-- Form card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6">
+      <div class="flex items-center gap-2 mb-5">
+        <svg class="h-5 w-5 text-[#002a8d]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        </svg>
+        <h3 class="text-lg font-bold text-[#002a8d]">Nuevo Reclamo</h3>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+          <select [(ngModel)]="tipoReclamo" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0051ff] outline-none text-sm bg-white">
+            @for (t of tiposReclamo; track t.value) {
+              <option [value]="t.value">{{ t.label }}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+          <select [(ngModel)]="categoria" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0051ff] outline-none text-sm bg-white">
+            @for (c of categorias; track c.value) {
+              <option [value]="c.value">{{ c.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+        <textarea [(ngModel)]="descripcion" rows="5" placeholder="Describe tu reclamo en detalle..." class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0051ff] outline-none text-sm resize-none"></textarea>
+      </div>
+      <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-gray-200 border-dashed text-sm text-[#8a99af] cursor-pointer hover:border-gray-400 transition-colors">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          <span>Adjuntar archivo (opcional)</span>
+        </div>
+        <span class="text-xs text-[#8a99af]">PDF, JPG o PNG. Máx 5 MB</span>
+      </div>
+      @if (error()) { <bcp-alert type="error">{{ error() }}</bcp-alert> }
+      <bcp-button variant="primary" size="full" (click)="enviarReclamo()" [loading]="loading()" [disabled]="loading() || !descripcion.trim()">Enviar {{ tipoLabel() }}</bcp-button>
+    </div>
+  } @else {
+    <!-- Success card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sm:p-10 text-center">
+      <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h3 class="text-xl font-bold text-[#002a8d] mb-2">{{ tipoLabel() }} Registrado</h3>
+      <p class="text-[#5c697a] mb-2">Hemos recibido tu {{ tipoLabel().toLowerCase() }}. Te contactaremos pronto.</p>
+      <p class="text-xs text-[#8a99af] mb-6">Recibirás las actualizaciones en tu correo registrado</p>
+      <bcp-button variant="primary" size="md" (click)="success.set(false)">Nuevo {{ tipoLabel() }}</bcp-button>
+    </div>
+  }
+
+  <!-- History section -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="p-5 sm:p-6 pb-0">
+      <div class="flex items-center gap-2 mb-4">
+        <svg class="h-5 w-5 text-[#8a99af]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h3 class="text-lg font-bold text-[#002a8d]">Historial de Reclamos</h3>
+      </div>
+    </div>
+
+    @if (historialLoading()) {
+      <div class="px-5 sm:px-6 pb-5 sm:pb-6">
+        <div class="animate-pulse space-y-3">
+          <div class="h-10 bg-gray-100 rounded-lg"></div>
+          <div class="h-10 bg-gray-100 rounded-lg"></div>
+          <div class="h-10 bg-gray-100 rounded-lg"></div>
+        </div>
+      </div>
+    } @else if (hasHistorial()) {
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-gray-50 text-left text-xs text-[#8a99af] uppercase tracking-wider">
+              <th class="px-5 py-3">N° Seguimiento</th>
+              <th class="px-5 py-3">Fecha</th>
+              <th class="px-5 py-3">Descripción</th>
+              <th class="px-5 py-3">Estado</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            @for (r of historialReclamos(); track r.idReclamo) {
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-5 py-3 font-mono text-[#002a8d] text-xs">{{ r.numeroSeguimiento }}</td>
+                <td class="px-5 py-3 text-[#5c697a] text-xs">{{ r.fechaCreacion | date:'dd/MM/yyyy' }}</td>
+                <td class="px-5 py-3 text-[#5c697a] max-w-xs truncate">{{ r.descripcion }}</td>
+                <td class="px-5 py-3">
+                  <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium" [class]="estadoClass(r.estadoReclamo)">
+                    {{ estadoLabel(r.estadoReclamo) }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="flex flex-col items-center justify-center py-10 px-5">
+        <svg class="h-12 w-12 text-[#8a99af] mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <p class="text-[#5c697a] font-medium">No tienes reclamos registrados</p>
+        <p class="text-[#8a99af] text-sm mt-1">Los reclamos que registres aparecerán aquí</p>
+      </div>
+    }
+  </div>
+</div>

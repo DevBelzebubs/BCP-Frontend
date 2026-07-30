@@ -1,0 +1,38 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <div>
+      <h1 class="text-2xl font-bold text-[#002a8d]">Auditoría de Roles</h1>
+      <p class="text-sm text-[#8a99af] mt-1">Historial de cambios de roles de empleados</p>
+    </div>
+    <a routerLink="/dashboard/admin/overview" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">← Volver</a>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 text-left text-xs text-[#8a99af] uppercase tracking-wider">
+            <th class="px-5 py-3">Fecha</th>
+            <th class="px-5 py-3">Admin</th>
+            <th class="px-5 py-3">Empleado</th>
+            <th class="px-5 py-3">Rol Anterior</th>
+            <th class="px-5 py-3">Rol Nuevo</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @for (r of registros(); track r.id) {
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-5 py-3 text-[#5c697a]">{{ r.fechaHoraCambio | date:'short' }}</td>
+              <td class="px-5 py-3 text-[#5c697a]">{{ r.adminId }}</td>
+              <td class="px-5 py-3 text-[#5c697a]">{{ r.empleadoId }}</td>
+              <td class="px-5 py-3"><span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">{{ r.rolAnterior }}</span></td>
+              <td class="px-5 py-3"><span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">{{ r.rolNuevo }}</span></td>
+            </tr>
+          } @empty {
+            <tr><td colspan="5" class="px-5 py-10 text-center text-[#8a99af]">No hay registros de auditoría</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

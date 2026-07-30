@@ -1,0 +1,57 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <div>
+      <h1 class="text-2xl font-bold text-[#002a8d]">Servicios</h1>
+      <p class="text-sm text-[#8a99af] mt-1">Gestionar servicios disponibles para pago</p>
+    </div>
+    <a routerLink="/dashboard/backoffice/overview" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">← Volver</a>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 max-w-lg">
+    <h3 class="font-bold text-[#002a8d] mb-4">{{ editMode() ? 'Editar Servicio' : 'Nuevo Servicio' }}</h3>
+    <div class="space-y-4">
+      <bcp-input label="Nombre" placeholder="Ej: Luz del Sur" [(value)]="form.nombre" />
+      <bcp-input label="Descripción" placeholder="Descripción del servicio" [(value)]="form.descripcion" />
+      <bcp-input label="Recibo (monto)" type="number" placeholder="0.00" [(value)]="form.recibo" />
+      @if (error()) { <bcp-alert type="error">{{ error() }}</bcp-alert> }
+      <div class="flex gap-3">
+        @if (editMode()) { <bcp-button variant="outline-gray" size="md" (click)="cancelarEdicion()">Cancelar</bcp-button> }
+        <bcp-button variant="primary" size="md" (click)="guardar()" [loading]="loading()">{{ editMode() ? 'Actualizar' : 'Crear' }}</bcp-button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 text-left text-xs text-[#8a99af] uppercase tracking-wider">
+            <th class="px-5 py-3">ID</th>
+            <th class="px-5 py-3">Nombre</th>
+            <th class="px-5 py-3">Descripción</th>
+            <th class="px-5 py-3">Recibo</th>
+            <th class="px-5 py-3">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @for (s of servicios(); track s.idServicio) {
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-5 py-3 text-[#002a8d] font-mono">{{ s.idServicio }}</td>
+              <td class="px-5 py-3 text-[#5c697a] font-medium">{{ s.nombre }}</td>
+              <td class="px-5 py-3 text-[#5c697a]">{{ s.descripcion }}</td>
+              <td class="px-5 py-3 font-mono text-[#002a8d]">S/ {{ s.recibo?.toFixed(2) }}</td>
+              <td class="px-5 py-3">
+                <div class="flex gap-2">
+                  <button (click)="editar(s)" class="text-xs text-[#0051ff] hover:text-[#ff7800] font-medium">Editar</button>
+                  <button (click)="eliminar(s.idServicio)" class="text-xs text-red-500 hover:text-red-700 font-medium">Eliminar</button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="5" class="px-5 py-10 text-center text-[#8a99af]">No hay servicios registrados</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

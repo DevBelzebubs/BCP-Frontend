@@ -1,0 +1,55 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <div>
+      <h1 class="text-2xl font-bold text-[#002a8d]">Gestión de Usuarios</h1>
+      <p class="text-sm text-[#8a99af] mt-1">Administrar roles de empleados</p>
+    </div>
+    <a routerLink="/dashboard/admin/overview" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">← Volver</a>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 text-left text-xs text-[#8a99af] uppercase tracking-wider">
+            <th class="px-5 py-3">ID</th>
+            <th class="px-5 py-3">Usuario</th>
+            <th class="px-5 py-3">Correo</th>
+            <th class="px-5 py-3">Rol Actual</th>
+            <th class="px-5 py-3">Cambiar Rol</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @for (e of empleados(); track e.empleadoId) {
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-5 py-3 text-[#002a8d] font-mono">{{ e.empleadoId }}</td>
+              <td class="px-5 py-3 text-[#5c697a] font-medium">{{ e.nombreUsuario }}</td>
+              <td class="px-5 py-3 text-[#5c697a]">{{ e.correoUsuario }}</td>
+              <td class="px-5 py-3">
+                <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">{{ e.rolActual }}</span>
+              </td>
+              <td class="px-5 py-3">
+                @if (cambiando() === e.empleadoId) {
+                  <div class="flex gap-2 items-center">
+                    <select [(ngModel)]="nuevoRol" class="text-xs px-2 py-1 border border-gray-300 rounded">
+                      <option value="EMPLEADO">EMPLEADO</option>
+                      <option value="ASESOR">ASESOR</option>
+                      <option value="BACKOFFICE">BACKOFFICE</option>
+                      <option value="ADMIN">ADMIN</option>
+                    </select>
+                    <button (click)="cambiarRol(e.empleadoId)" class="text-xs text-green-600 font-medium" [disabled]="loading()">✓</button>
+                    <button (click)="cambiando.set(null)" class="text-xs text-red-500 font-medium">✗</button>
+                  </div>
+                } @else {
+                  <button (click)="cambiando.set(e.empleadoId); nuevoRol.set(e.rolActual)" class="text-xs text-[#0051ff] hover:text-[#ff7800] font-medium">Cambiar</button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="5" class="px-5 py-10 text-center text-[#8a99af]">No hay empleados registrados</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

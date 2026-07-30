@@ -1,0 +1,48 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <div>
+      <h1 class="text-2xl font-bold text-[#002a8d]">Reclamos</h1>
+      <p class="text-sm text-[#8a99af] mt-1">Gestionar reclamos de clientes</p>
+    </div>
+    <a routerLink="/dashboard/backoffice/overview" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">← Volver</a>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 text-left text-xs text-[#8a99af] uppercase tracking-wider">
+            <th class="px-5 py-3">N° Seguimiento</th>
+            <th class="px-5 py-3">Cliente</th>
+            <th class="px-5 py-3">Fecha</th>
+            <th class="px-5 py-3">Descripción</th>
+            <th class="px-5 py-3">Estado</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @for (r of reclamos(); track r.idReclamo) {
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-5 py-3 font-mono text-[#002a8d] text-xs">{{ r.numeroSeguimiento }}</td>
+              <td class="px-5 py-3 text-[#5c697a]">{{ r.clienteId }}</td>
+              <td class="px-5 py-3 text-[#5c697a]">{{ r.fechaCreacion | date:'shortDate' }}</td>
+              <td class="px-5 py-3 text-[#5c697a] max-w-xs truncate">{{ r.descripcion }}</td>
+              <td class="px-5 py-3">
+                <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium"
+                      [class.bg-red-50]="r.estadoReclamo === 'PENDIENTE'"
+                      [class.text-red-700]="r.estadoReclamo === 'PENDIENTE'"
+                      [class.bg-yellow-50]="r.estadoReclamo === 'EN_REVISION'"
+                      [class.text-yellow-700]="r.estadoReclamo === 'EN_REVISION'"
+                      [class.bg-green-50]="r.estadoReclamo === 'ATENDIDO'"
+                      [class.text-green-700]="r.estadoReclamo === 'ATENDIDO'">
+                  {{ r.estadoReclamo }}
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="5" class="px-5 py-10 text-center text-[#8a99af]">No hay reclamos registrados</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

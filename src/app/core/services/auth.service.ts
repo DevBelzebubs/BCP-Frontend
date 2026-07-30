@@ -26,6 +26,7 @@ export class AuthService {
   private readonly userDniKey = 'userDni';
 
   isAuthenticated = signal(this.hasToken());
+  userType = signal<string | null>(this.getUserType());
 
   constructor(private http: HttpClient) {}
 
@@ -47,6 +48,7 @@ export class AuthService {
     localStorage.removeItem(this.userTypeKey);
     localStorage.removeItem(this.userDniKey);
     this.isAuthenticated.set(false);
+    this.userType.set(null);
   }
 
   getToken(): string | null {
@@ -75,6 +77,7 @@ export class AuthService {
     localStorage.setItem(this.userTypeKey, data.tipoUsuario);
     localStorage.setItem(this.userDniKey, data.dni);
     this.isAuthenticated.set(true);
+    this.userType.set(data.tipoUsuario);
   }
 
   generateCaptcha(): string {

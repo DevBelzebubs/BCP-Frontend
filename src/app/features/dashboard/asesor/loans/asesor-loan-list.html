@@ -1,0 +1,91 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <div>
+      <h1 class="text-2xl font-bold text-[#002a8d]">Solicitudes de Crédito</h1>
+      <p class="text-sm text-[#8a99af] mt-1">Revisa, aprueba o rechaza solicitudes</p>
+    </div>
+    <div class="flex gap-2">
+      <button (click)="cargar()" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium">⟳ Actualizar</button>
+      <a routerLink="/dashboard/asesor/overview" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium">← Volver</a>
+    </div>
+  </div>
+
+  @if (error()) { <bcp-alert type="error">{{ error() }}</bcp-alert> }
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 text-left text-xs text-[#8a99af] uppercase tracking-wider">
+            <th class="px-5 py-3">ID</th>
+            <th class="px-5 py-3">Usuario</th>
+            <th class="px-5 py-3">Monto</th>
+            <th class="px-5 py-3">Plazo</th>
+            <th class="px-5 py-3">Estado</th>
+            <th class="px-5 py-3">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @for (s of solicitudes(); track s.id) {
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-5 py-3 text-[#002a8d] font-mono">{{ s.id }}</td>
+              <td class="px-5 py-3 text-[#5c697a]">{{ s.usuarioId }}</td>
+              <td class="px-5 py-3 font-mono text-[#002a8d]">S/ {{ s.monto.toFixed(2) }}</td>
+              <td class="px-5 py-3 text-[#5c697a]">{{ s.plazoMeses }} meses</td>
+              <td class="px-5 py-3">
+                <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium"
+                      [class.bg-yellow-50]="s.estado === 'PENDIENTE'"
+                      [class.text-yellow-700]="s.estado === 'PENDIENTE'"
+                      [class.bg-green-50]="s.estado === 'APROBADO'"
+                      [class.text-green-700]="s.estado === 'APROBADO'"
+                      [class.bg-red-50]="s.estado === 'RECHAZADO'"
+                      [class.text-red-700]="s.estado === 'RECHAZADO'">
+                  {{ s.estado }}
+                </span>
+              </td>
+              <td class="px-5 py-3">
+                @if (s.estado === 'PENDIENTE') {
+                  <div class="flex gap-2">
+                    <button (click)="confirmarAprobar(s.id)" class="px-3 py-1 rounded-lg bg-green-50 text-green-700 text-xs font-medium hover:bg-green-100 transition-colors">Aprobar</button>
+                    <button (click)="confirmarRechazar(s.id)" class="px-3 py-1 rounded-lg bg-red-50 text-red-700 text-xs font-medium hover:bg-red-100 transition-colors">Rechazar</button>
+                  </div>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="6" class="px-5 py-10 text-center text-[#8a99af]">No hay solicitudes</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  @if (accion()) {
+    <div class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4" (click)="accion.set(null); selectedId.set(null); motivoRechazo.set('')">
+      <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl" (click)="$event.stopPropagation()">
+        @if (accion() === 'aprobar') {
+          <div class="text-center">
+            <h3 class="text-lg font-bold text-[#002a8d] mb-2">¿Aprobar solicitud?</h3>
+            <p class="text-[#5c697a] text-sm mb-6">Esta acción aprobará la solicitud de crédito.</p>
+            <div class="flex gap-3 justify-center">
+              <bcp-button variant="outline-gray" size="md" (click)="accion.set(null)">Cancelar</bcp-button>
+              <bcp-button variant="primary" size="md" (click)="ejecutar()" [loading]="loading()">Confirmar</bcp-button>
+            </div>
+          </div>
+        }
+        @if (accion() === 'rechazar') {
+          <div>
+            <h3 class="text-lg font-bold text-[#002a8d] mb-2">Rechazar solicitud</h3>
+            <div class="space-y-4 mt-4">
+              <textarea [(ngModel)]="motivoRechazo" rows="3" placeholder="Motivo del rechazo..." class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0051ff] outline-none text-sm resize-none"></textarea>
+              <div class="flex gap-3">
+                <bcp-button variant="outline-gray" size="md" (click)="accion.set(null)">Cancelar</bcp-button>
+                <bcp-button variant="primary" size="md" (click)="ejecutar()" [loading]="loading()">Rechazar</bcp-button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

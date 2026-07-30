@@ -1,0 +1,248 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <div>
+      <h1 class="text-2xl font-bold text-[#002a8d]">Transferencias</h1>
+      <p class="text-sm text-[#8a99af] mt-1">Transfiere dinero entre tus cuentas</p>
+    </div>
+    <a routerLink="/dashboard/cliente/overview" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">← Volver al Resumen</a>
+  </div>
+
+  <!-- Summary stat bar -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="bg-white rounded-2xl shadow-sm p-4 border border-gray-100">
+      <p class="text-xs text-[#8a99af] mb-1">Disponible para transferir</p>
+      <p class="text-xl font-bold text-[#002a8d] font-mono tracking-wider">{{ disponibleLabel() }}</p>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm p-4 border border-gray-100">
+      <p class="text-xs text-[#8a99af] mb-1">Límite diario restante</p>
+      <p class="text-xl font-bold text-[#002a8d] font-mono tracking-wider">S/ {{ limiteRestante().toLocaleString('es-PE') }}</p>
+      <div class="mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+        <div class="h-full bg-[#0051ff] rounded-full transition-all duration-300"
+             [style.width.%]="porcentajeLimiteUsado()"></div>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm p-4 border border-gray-100">
+      <p class="text-xs text-[#8a99af] mb-1">Costo de transferencia</p>
+      <p class="text-xl font-bold text-[#78be20]">Gratuito</p>
+      <p class="text-xs text-[#8a99af] mt-1">Entre cuentas BCP</p>
+    </div>
+  </div>
+
+  @if (step === 'form') {
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Left column: form -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Transferencias Rápidas -->
+        @if (cuentasSinOrigen().length > 0) {
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="h-4 w-4 text-[#ff7800]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <h3 class="text-sm font-bold text-[#002a8d]">Transferencias Rápidas</h3>
+            </div>
+            <div class="flex gap-2 overflow-x-auto pb-1">
+              @for (c of cuentasSinOrigen(); track c.idCuenta) {
+                <button (click)="selectCuentaRapida(c)"
+                        class="flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm whitespace-nowrap transition-all duration-200"
+                        [class.border-[#0051ff]]="isSelectedCuenta(c.idCuenta)"
+                        [class.bg-blue-50]="isSelectedCuenta(c.idCuenta)"
+                        [class.border-gray-200]="!isSelectedCuenta(c.idCuenta)"
+                        [class.hover:border-gray-300]="!isSelectedCuenta(c.idCuenta)">
+                  <div class="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-[#5c697a]">
+                    {{ tipoLabel(c.tipo).charAt(0) }}
+                  </div>
+                  <div class="text-left">
+                    <p class="text-xs font-medium text-[#002a8d]">{{ tipoLabel(c.tipo) }}</p>
+                    <p class="text-xs text-[#8a99af]">{{ formatCuenta(c.numeroCuenta) }}</p>
+                  </div>
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Form -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6">
+          <div class="flex items-center gap-2 mb-5">
+            <svg class="h-5 w-5 text-[#002a8d]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+            </svg>
+            <h3 class="text-lg font-bold text-[#002a8d]">Nueva Transferencia</h3>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Cuenta Origen</label>
+              <select (change)="cuentaOrigenId.set(+$any($event.target).value)" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0051ff] outline-none text-sm bg-white appearance-none">
+                <option value="" disabled selected>Selecciona una cuenta</option>
+                @for (c of cuentas(); track c.idCuenta) {
+                  <option [value]="c.idCuenta">{{ tipoLabel(c.tipo) }} — {{ formatCuenta(c.numeroCuenta) }} — {{ formatSaldo(c.saldo) }}</option>
+                }
+              </select>
+              @if (origenSeleccionado(); as origen) {
+                <div class="mt-2 flex items-center gap-2 text-xs text-[#5c697a] bg-gray-50 rounded-lg px-3 py-2">
+                  <span class="font-medium text-[#002a8d]">Saldo disponible:</span>
+                  <span class="font-mono">{{ formatSaldo(origen.saldo) }}</span>
+                </div>
+              }
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Cuenta Destino</label>
+              <div class="relative">
+                <input [(ngModel)]="cuentaDestino" type="number" placeholder="Número de cuenta destino" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0051ff] outline-none text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Monto</label>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[#8a99af] font-medium">S/</span>
+                <input [(ngModel)]="monto" type="number" placeholder="0.00" class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0051ff] outline-none text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              </div>
+              @if (montoFormatted()) {
+                <p class="text-xs text-[#8a99af] mt-1">Equivale a {{ montoFormatted() }}</p>
+              }
+            </div>
+            @if (error()) { <bcp-alert type="error">{{ error() }}</bcp-alert> }
+            <bcp-button variant="primary" size="full" (click)="iniciarTransferencia()" [loading]="loading()" [disabled]="loading()">Continuar</bcp-button>
+          </div>
+        </div>
+
+        <!-- Últimas Transferencias (empty state) -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6">
+          <div class="flex items-center gap-2 mb-4">
+            <svg class="h-5 w-5 text-[#8a99af]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 class="text-lg font-bold text-[#002a8d]">Últimas Transferencias</h3>
+          </div>
+          <div class="flex flex-col items-center justify-center py-8 text-center">
+            <svg class="h-12 w-12 text-[#8a99af] mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+            </svg>
+            <p class="text-[#5c697a] font-medium">No hay transferencias recientes</p>
+            <p class="text-[#8a99af] text-sm mt-1">Tus últimas transferencias aparecerán aquí</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: info util contextual -->
+      <div class="space-y-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <div class="flex items-center gap-2 mb-4">
+            <svg class="h-5 w-5 text-[#ff7800]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 class="text-lg font-bold text-[#002a8d]">Horarios de Transferencia</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3 p-3 bg-green-50 rounded-xl">
+              <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                <svg class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-[#002a8d]">Inmediato 24/7</p>
+                <p class="text-xs text-[#5c697a]">Transferencias entre cuentas BCP en tiempo real</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-yellow-50 rounded-xl">
+              <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center shrink-0">
+                <svg class="h-4 w-4 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-[#002a8d]">A otros bancos</p>
+                <p class="text-xs text-[#5c697a]">Lun–Vie 8am–6pm | Sáb 9am–1pm</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <div class="flex items-center gap-2 mb-4">
+            <svg class="h-5 w-5 text-[#0051ff]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 class="text-lg font-bold text-[#002a8d]">¿Problemas con tu transferencia?</h3>
+          </div>
+          <p class="text-sm text-[#5c697a] mb-3">Comunícate con nuestro equipo de soporte:</p>
+          <div class="space-y-2">
+            <a href="tel:013119898" class="flex items-center gap-2 text-sm text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              (01) 311-9898
+            </a>
+            <a href="#" class="flex items-center gap-2 text-sm text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+              Chatea con nosotros
+            </a>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <div class="flex items-center gap-2 mb-4">
+            <svg class="h-5 w-5 text-[#78be20]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <h3 class="text-lg font-bold text-[#002a8d]">Transferencia Programada</h3>
+          </div>
+          <div class="flex flex-col items-center justify-center py-4 text-center">
+            <svg class="h-10 w-10 text-[#8a99af] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p class="text-sm text-[#5c697a] font-medium">No tienes transferencias programadas</p>
+            <p class="text-xs text-[#8a99af] mt-1">Programa pagos futuros desde aquí</p>
+            <bcp-button variant="outline-gray" size="sm" class="mt-3">Agendar transferencia</bcp-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (step === 'otp') {
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6">
+      <div class="flex items-center gap-2 mb-5">
+        <svg class="h-5 w-5 text-[#0051ff]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+        <h3 class="text-lg font-bold text-[#002a8d]">Confirmar Transferencia</h3>
+      </div>
+      <div class="space-y-4">
+        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm flex items-start gap-3">
+          <svg class="h-5 w-5 text-[#0051ff] mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span class="text-[#0051ff]">Ingresa el código OTP enviado a tu correo para confirmar la transferencia.</span>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Código OTP</label>
+          <input [(ngModel)]="otp" type="text" placeholder="Ingresa el código" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0051ff] outline-none text-sm text-center tracking-[0.5em] font-mono" maxlength="6" />
+        </div>
+        @if (error()) { <bcp-alert type="error">{{ error() }}</bcp-alert> }
+        <div class="flex flex-col sm:flex-row gap-3">
+          <bcp-button variant="outline-gray" size="full" (click)="reset()">Cancelar</bcp-button>
+          <bcp-button variant="primary" size="full" (click)="confirmarTransferencia()" [loading]="loading()" [disabled]="loading()">Confirmar</bcp-button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (step === 'success') {
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sm:p-10 text-center">
+      <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h3 class="text-xl font-bold text-[#002a8d] mb-2">Transferencia Exitosa</h3>
+      <p class="text-[#5c697a] mb-2">Tu transferencia se ha realizado correctamente.</p>
+      <p class="text-xs text-[#8a99af] mb-6">Los cambios se verán reflejados en tus cuentas de inmediato.</p>
+      <bcp-button variant="primary" size="md" (click)="reset()">Nueva Transferencia</bcp-button>
+    </div>
+  }
+</div>

@@ -1,0 +1,17 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <div>
+      <h1 class="text-2xl font-bold text-[#002a8d]">Reporte Diario</h1>
+      <p class="text-sm text-[#8a99af] mt-1">Generar reporte diario de operaciones</p>
+    </div>
+    <a routerLink="/dashboard/asesor/overview" class="text-sm text-[#0051ff] hover:text-[#ff7800] font-medium transition-colors">← Volver</a>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 max-w-md">
+    <div class="space-y-4">
+      <bcp-input label="Fecha" type="date" [(value)]="fecha" />
+      @if (error()) { <bcp-alert type="error">{{ error() }}</bcp-alert> }
+      <bcp-button variant="primary" size="full" (click)="descargar()" [loading]="loading()">Descargar Reporte PDF</bcp-button>
+    </div>
+  </div>
+</div>
