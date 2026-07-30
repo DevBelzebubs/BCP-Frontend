@@ -8,6 +8,7 @@ import { BcpButton } from '../../../shared/ui';
   selector: 'app-profile',
   imports: [CommonModule, RouterModule, BcpButton],
   templateUrl: './profile.html',
+  styleUrl: './profile.css',
 })
 export class Profile {
   private dashboardService = inject(DashboardService);

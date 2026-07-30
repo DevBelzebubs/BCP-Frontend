@@ -8,6 +8,7 @@ import { BcpAccountCard } from '../../../shared/ui';
   selector: 'app-accounts',
   imports: [CommonModule, RouterModule, BcpAccountCard],
   templateUrl: './accounts.html',
+  styleUrl: './accounts.css',
 })
 export class Accounts {
   private dashboardService = inject(DashboardService);

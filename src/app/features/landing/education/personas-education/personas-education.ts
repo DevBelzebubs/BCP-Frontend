@@ -13,6 +13,7 @@ interface EducationCard {
   selector: 'app-personas-education',
   imports: [BcpBadge, BcpCtaLink],
   templateUrl: './personas-education.html',
+  styleUrl: './personas-education.css',
 })
 export class PersonasEducation {
   educationItems = signal<EducationCard[]>([

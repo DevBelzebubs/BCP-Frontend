@@ -8,6 +8,7 @@ import { BcpPendingPayments, BcpButton } from '../../../shared/ui';
   selector: 'app-payments',
   imports: [CommonModule, RouterModule, BcpPendingPayments, BcpButton],
   templateUrl: './payments.html',
+  styleUrl: './payments.css',
 })
 export class Payments {
   private dashboardService = inject(DashboardService);

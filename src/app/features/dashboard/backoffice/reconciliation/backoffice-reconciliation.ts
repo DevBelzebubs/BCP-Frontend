@@ -9,6 +9,7 @@ import { BackofficeService } from '../../../../core';
   selector: 'app-backoffice-reconciliation',
   imports: [CommonModule, FormsModule, RouterModule, BcpInput, BcpButton, BcpAlert],
   templateUrl: './backoffice-reconciliation.html',
+  styleUrl: './backoffice-reconciliation.css',
 })
 export class BackofficeReconciliation {
   private service = inject(BackofficeService);

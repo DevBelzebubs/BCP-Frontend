@@ -7,6 +7,7 @@ import { AuthService, getRoleLabel } from '../../../core';
   selector: 'app-dashboard-header',
   imports: [CommonModule],
   templateUrl: './header.html',
+  styleUrl: './header.css',
 })
 export class DashboardHeader implements OnInit, OnDestroy {
   private auth = inject(AuthService);

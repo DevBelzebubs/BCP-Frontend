@@ -9,6 +9,7 @@ import { AuthService, DashboardService, ReclamoService, type ReclamoResponseDTO 
   selector: 'app-claims',
   imports: [CommonModule, FormsModule, RouterModule, BcpButton, BcpAlert],
   templateUrl: './claims.html',
+  styleUrl: './claims.css',
 })
 export class Claims implements OnInit {
   private reclamoService = inject(ReclamoService);

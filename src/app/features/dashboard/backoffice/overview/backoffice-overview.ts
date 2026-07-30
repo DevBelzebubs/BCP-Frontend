@@ -7,6 +7,7 @@ import { AuthService } from '../../../../core';
   selector: 'app-backoffice-overview',
   imports: [CommonModule, RouterModule],
   templateUrl: './backoffice-overview.html',
+  styleUrl: './backoffice-overview.css',
 })
 export class BackofficeOverview {
   private auth = inject(AuthService);

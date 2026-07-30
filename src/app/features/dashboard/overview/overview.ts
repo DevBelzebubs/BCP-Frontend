@@ -8,6 +8,7 @@ import { BcpAlert, BcpAccountCard, BcpPendingPayments, BcpQuickActions } from '.
   selector: 'app-overview',
   imports: [CommonModule, RouterModule, BcpAlert, BcpAccountCard, BcpPendingPayments, BcpQuickActions],
   templateUrl: './overview.html',
+  styleUrl: './overview.css',
 })
 export class Overview implements OnInit {
   private dashboardService = inject(DashboardService);

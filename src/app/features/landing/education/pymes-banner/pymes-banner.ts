@@ -13,6 +13,7 @@ interface BannerData {
   selector: 'app-pymes-banner',
   imports: [],
   templateUrl: './pymes-banner.html',
+  styleUrl: './pymes-banner.css',
 })
 export class PymesBanner {
   bannerData = signal<BannerData>({

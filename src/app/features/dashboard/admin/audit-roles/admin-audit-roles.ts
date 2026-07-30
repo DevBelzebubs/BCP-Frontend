@@ -9,6 +9,7 @@ import { AdminService } from '../../../../core';
   selector: 'app-admin-audit-roles',
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './admin-audit-roles.html',
+  styleUrl: './admin-audit-roles.css',
 })
 export class AdminAuditRoles implements OnInit {
   private service = inject(AdminService);

@@ -7,6 +7,7 @@ import { AuthService } from '../../../../core';
   selector: 'app-admin-overview',
   imports: [CommonModule, RouterModule],
   templateUrl: './admin-overview.html',
+  styleUrl: './admin-overview.css',
 })
 export class AdminOverview {
   private auth = inject(AuthService);

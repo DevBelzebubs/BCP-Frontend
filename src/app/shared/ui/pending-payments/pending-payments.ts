@@ -8,6 +8,7 @@ import type { PagoPendiente } from '../../../core';
   selector: 'bcp-pending-payments',
   imports: [CommonModule, BcpCard, BcpButton],
   templateUrl: './pending-payments.html',
+  styleUrl: './pending-payments.css',
 })
 export class BcpPendingPayments {
   pagos = input.required<PagoPendiente[]>();

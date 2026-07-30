@@ -7,5 +7,6 @@ import { BcpButton } from '../../../shared/ui';
   selector: 'app-loans',
   imports: [CommonModule, RouterModule, BcpButton],
   templateUrl: './loans.html',
+  styleUrl: './loans.css',
 })
 export class Loans {}

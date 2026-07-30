@@ -9,6 +9,7 @@ import { EmpleadoService } from '../../../../core';
   selector: 'app-empleado-deposit',
   imports: [CommonModule, FormsModule, RouterModule, BcpInput, BcpButton, BcpAlert],
   templateUrl: './empleado-deposit.html',
+  styleUrl: './empleado-deposit.css',
 })
 export class EmpleadoDeposit {
   private service = inject(EmpleadoService);

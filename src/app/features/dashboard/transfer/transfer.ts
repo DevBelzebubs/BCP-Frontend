@@ -9,6 +9,7 @@ import { CuentaService, DashboardService, type DetalleCuenta } from '../../../co
   selector: 'app-transfer',
   imports: [CommonModule, FormsModule, RouterModule, BcpButton, BcpAlert],
   templateUrl: './transfer.html',
+  styleUrl: './transfer.css',
 })
 export class Transfer {
   private cuentaService = inject(CuentaService);

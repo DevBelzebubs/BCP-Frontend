@@ -9,6 +9,7 @@ import { ReporteService } from '../../../../core';
   selector: 'app-asesor-reports',
   imports: [CommonModule, FormsModule, RouterModule, BcpInput, BcpButton, BcpAlert],
   templateUrl: './asesor-reports.html',
+  styleUrl: './asesor-reports.css',
 })
 export class AsesorReports {
   private service = inject(ReporteService);

@@ -12,6 +12,7 @@ export interface NavItem {
   selector: 'app-dashboard-sidebar',
   imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.html',
+  styleUrl: './sidebar.css',
 })
 export class DashboardSidebar {
   open = input(false);

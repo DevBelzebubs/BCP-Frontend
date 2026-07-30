@@ -9,6 +9,7 @@ import { DashboardHeader } from '../header/header';
   selector: 'app-dashboard-shell',
   imports: [CommonModule, RouterModule, DashboardSidebar, DashboardHeader],
   templateUrl: './shell.html',
+  styleUrl: './shell.css',
 })
 export class DashboardShell {
   private auth = inject(AuthService);

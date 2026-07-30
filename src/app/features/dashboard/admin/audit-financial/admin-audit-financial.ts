@@ -9,6 +9,7 @@ import { AdminService } from '../../../../core';
   selector: 'app-admin-audit-financial',
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './admin-audit-financial.html',
+  styleUrl: './admin-audit-financial.css',
 })
 export class AdminAuditFinancial implements OnInit {
   private service = inject(AdminService);

@@ -9,6 +9,7 @@ import { ServicioService, type CrearServicioDTO } from '../../../../core';
   selector: 'app-backoffice-services',
   imports: [CommonModule, FormsModule, RouterModule, BcpInput, BcpButton, BcpAlert],
   templateUrl: './backoffice-services.html',
+  styleUrl: './backoffice-services.css',
 })
 export class BackofficeServices implements OnInit {
   private service = inject(ServicioService);

@@ -8,6 +8,7 @@ import type { DetalleCuenta } from '../../../core';
   selector: 'bcp-account-card',
   imports: [CommonModule, BcpCard, BcpBadge],
   templateUrl: './account-card.html',
+  styleUrl: './account-card.css',
 })
 export class BcpAccountCard {
   account = input.required<DetalleCuenta>();

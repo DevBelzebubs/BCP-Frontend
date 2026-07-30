@@ -7,6 +7,7 @@ import { AuthService } from '../../../../core';
   selector: 'app-asesor-overview',
   imports: [CommonModule, RouterModule],
   templateUrl: './asesor-overview.html',
+  styleUrl: './asesor-overview.css',
 })
 export class AsesorOverview {
   private auth = inject(AuthService);

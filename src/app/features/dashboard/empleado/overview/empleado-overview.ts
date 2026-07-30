@@ -7,6 +7,7 @@ import { AuthService } from '../../../../core';
   selector: 'app-empleado-overview',
   imports: [CommonModule, RouterModule],
   templateUrl: './empleado-overview.html',
+  styleUrl: './empleado-overview.css',
 })
 export class EmpleadoOverview {
   private auth = inject(AuthService);

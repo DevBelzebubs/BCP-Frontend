@@ -10,6 +10,7 @@ interface UsefulLink {
   selector: 'app-empresas-links',
   imports: [],
   templateUrl: './empresas-links.html',
+  styleUrl: './empresas-links.css',
 })
 export class EmpresasLinks {
   links = signal<UsefulLink[]>([

@@ -9,6 +9,7 @@ import { ReclamoService } from '../../../../core';
   selector: 'app-backoffice-claims',
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './backoffice-claims.html',
+  styleUrl: './backoffice-claims.css',
 })
 export class BackofficeClaims implements OnInit {
   private service = inject(ReclamoService);

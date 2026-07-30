@@ -12,6 +12,7 @@ interface QuickAction {
   selector: 'bcp-quick-actions',
   imports: [CommonModule, RouterModule],
   templateUrl: './quick-actions.html',
+  styleUrl: './quick-actions.css',
 })
 export class BcpQuickActions {
   protected actions: QuickAction[] = [

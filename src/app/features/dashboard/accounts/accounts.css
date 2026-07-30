@@ -1,0 +1,33 @@
+.stat-card {
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.stat-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .06);
+}
+
+.consolidated-card {
+  transition: transform .2s ease;
+}
+.consolidated-card:hover {
+  transform: scale(1.005);
+}
+
+.filter-chip {
+  transition: all .2s ease;
+}
+.filter-chip:hover:not(.filter-chip-active) {
+  background: #e5e7eb;
+}
+.filter-chip-active {
+  background: #002a8d;
+  color: white;
+}
+
+.card-grid-item {
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.card-grid-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .08);
+}

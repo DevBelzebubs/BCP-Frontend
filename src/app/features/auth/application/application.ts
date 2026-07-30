@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
   selector: 'app-application',
   imports: [CommonModule, RouterModule],
   templateUrl: './application.html',
+  styleUrl: './application.css',
 })
 export class Application {
   currentSlideIndex = signal(0);

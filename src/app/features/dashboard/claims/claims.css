@@ -1,0 +1,72 @@
+.info-bar {
+  transition: border-color .15s ease;
+}
+
+.form-card {
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.form-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .06);
+}
+
+.form-textarea {
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.form-textarea:focus {
+  border-color: #0051ff;
+  box-shadow: 0 0 0 3px rgba(0, 81, 255, .1);
+}
+
+.file-upload {
+  transition: all .2s ease;
+}
+.file-upload:hover {
+  border-color: #0051ff;
+  background: #f8faff;
+}
+
+.success-card {
+  animation: fadeSlideUp .35s ease;
+}
+.success-icon {
+  animation: successPop .4s cubic-bezier(.68, -.55, .27, 1.55);
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes successPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.history-row {
+  transition: background .15s ease;
+}
+.history-row:hover {
+  background: #f9fafb;
+}
+
+.status-badge {
+  transition: transform .15s ease;
+}
+.status-badge:hover {
+  transform: scale(1.05);
+}

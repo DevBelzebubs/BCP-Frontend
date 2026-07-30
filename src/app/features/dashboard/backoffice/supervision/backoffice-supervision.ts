@@ -9,6 +9,7 @@ import { BackofficeService } from '../../../../core';
   selector: 'app-backoffice-supervision',
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './backoffice-supervision.html',
+  styleUrl: './backoffice-supervision.css',
 })
 export class BackofficeSupervision implements OnInit {
   private service = inject(BackofficeService);

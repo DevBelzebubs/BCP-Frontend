@@ -1,0 +1,24 @@
+.stat-card {
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.stat-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .06);
+}
+
+.service-add-card {
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.service-add-card:hover {
+  border-color: #0051ff;
+  box-shadow: 0 0 0 1px rgba(0, 81, 255, .15);
+}
+
+.history-empty {
+  animation: fadeIn .3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

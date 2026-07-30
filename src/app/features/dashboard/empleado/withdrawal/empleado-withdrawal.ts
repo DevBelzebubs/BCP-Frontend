@@ -9,6 +9,7 @@ import { EmpleadoService } from '../../../../core';
   selector: 'app-empleado-withdrawal',
   imports: [CommonModule, FormsModule, RouterModule, BcpInput, BcpButton, BcpAlert],
   templateUrl: './empleado-withdrawal.html',
+  styleUrl: './empleado-withdrawal.css',
 })
 export class EmpleadoWithdrawal {
   private service = inject(EmpleadoService);

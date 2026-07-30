@@ -9,6 +9,7 @@ import { PrestamoService } from '../../../../core';
   selector: 'app-asesor-loan-list',
   imports: [CommonModule, FormsModule, RouterModule, BcpButton, BcpAlert],
   templateUrl: './asesor-loan-list.html',
+  styleUrl: './asesor-loan-list.css',
 })
 export class AsesorLoanList implements OnInit {
   private service = inject(PrestamoService);

@@ -9,6 +9,7 @@ import { AuthService } from '../../../core';
   selector: 'app-login',
   imports: [CommonModule, FormsModule, BcpInput, BcpPasswordInput, BcpButton, BcpAlert],
   templateUrl: './login.html',
+  styleUrl: './login.css',
 })
 export class Login implements OnInit, OnDestroy {
   nombre = '';
