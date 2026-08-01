@@ -22,12 +22,9 @@
 .filter-chip-active {
   background: #002a8d;
   color: white;
+  box-shadow: 0 2px 8px rgba(0, 42, 141, .25);
 }
-
-.card-grid-item {
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-.card-grid-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, .08);
+.filter-chip-inactive {
+  background: #f3f4f6;
+  color: #5c697a;
 }

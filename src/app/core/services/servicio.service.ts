@@ -28,6 +28,10 @@ export class ServicioService {
     return this.http.put(`${API_URL}/api/servicios/${id}`, dto);
   }
 
+  listar(): Observable<any> {
+    return this.http.get(`${API_URL}/api/servicios`);
+  }
+
   eliminar(id: number): Observable<any> {
     return this.http.delete(`${API_URL}/api/servicios/${id}`);
   }

@@ -14,12 +14,26 @@ export interface AbrirCuentaPayload {
 }
 
 export interface TransferenciaRequest {
-  idCuentaDestino: number;
+  numeroCuentaDestino: string;
   monto: number;
 }
 
 export interface TransferirResponse {
   idTransaccion: string;
+}
+
+export interface ConfirmarTransferenciaDTO {
+  dni: string;
+  codigoOTP: string;
+}
+
+export interface HistorialTransferencia {
+  id: number;
+  cuentaId: number;
+  numeroCuenta: string;
+  tipo: string;
+  monto: number;
+  fecha: string;
 }
 
 
@@ -37,7 +51,11 @@ export class CuentaService {
     return this.http.post(`${API_URL}/api/cuentas/${cuentaOrigenId}/transferir`, data);
   }
 
-  confirmarTransferencia(data: Record<string, string>): Observable<any> {
+  confirmarTransferencia(data: ConfirmarTransferenciaDTO): Observable<any> {
     return this.http.post(`${API_URL}/api/cuentas/confirmar-transferencia`, data);
+  }
+
+  getHistorialTransferencias(dni: string): Observable<{ data: HistorialTransferencia[] }> {
+    return this.http.get<{ data: HistorialTransferencia[] }>(`${API_URL}/api/cuentas/historial-transferencias/usuario/${dni}`);
   }
 }

@@ -1,0 +1,49 @@
+.sidebar-nav {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-item.active-nav {
+  background: linear-gradient(90deg, #0051ff, #0039c7);
+  color: #ffffff;
+  box-shadow: 0 8px 24px -6px rgba(0, 81, 255, 0.35);
+}
+
+.nav-item.active-nav::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 18px;
+  border-radius: 0 4px 4px 0;
+  background: #ff7800;
+}
+
+.nav-item.active-nav .nav-icon {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ff7800;
+}
+
+.nav-item.active-nav:hover .nav-icon {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ff7800;
+}

@@ -113,7 +113,7 @@
 
       <div class="space-y-4">
         @for (cuenta of filteredCuentas(); track cuenta.idCuenta) {
-          <bcp-account-card [account]="cuenta" />
+          <bcp-account-card [account]="cuenta" [titular]="userName()" />
         }
         @if (filteredCuentas().length === 0) {
           <div class="bg-white rounded-2xl border border-gray-100 p-8 text-center">

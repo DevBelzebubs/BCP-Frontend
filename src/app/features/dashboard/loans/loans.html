@@ -42,7 +42,57 @@
     </div>
   </div>
 
-  <!-- Card 2: Beneficios -->
+  <!-- Card 2: Existing Loans -->
+  @if (tienePrestamos()) {
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="p-5 sm:p-6 pb-0">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <svg class="h-5 w-5 text-[#002a8d]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 class="text-lg font-bold text-[#002a8d]">Tus Préstamos</h3>
+          </div>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-gray-50 text-left text-xs text-[#8a99af] uppercase tracking-wider">
+              <th class="px-5 py-3">Monto</th>
+              <th class="px-5 py-3">Plazo</th>
+              <th class="px-5 py-3">Interés</th>
+              <th class="px-5 py-3">Estado</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            @for (p of prestamos(); track p.id) {
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-5 py-3 font-medium text-[#002a8d] font-mono">{{ formatMonto(p.monto) }}</td>
+                <td class="px-5 py-3 text-[#5c697a]">{{ p.plazoMeses }} meses</td>
+                <td class="px-5 py-3 text-[#5c697a]">{{ p.interes }}%</td>
+                <td class="px-5 py-3">
+                  <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium"
+                        [class.bg-yellow-50]="p.estado === 'PENDIENTE'"
+                        [class.text-yellow-700]="p.estado === 'PENDIENTE'"
+                        [class.bg-green-50]="p.estado === 'APROBADO' || p.estado === 'DESEMBOLSADO'"
+                        [class.text-green-700]="p.estado === 'APROBADO' || p.estado === 'DESEMBOLSADO'"
+                        [class.bg-red-50]="p.estado === 'RECHAZADO'"
+                        [class.text-red-700]="p.estado === 'RECHAZADO'"
+                        [class.bg-blue-50]="p.estado === 'PAGADO'"
+                        [class.text-blue-700]="p.estado === 'PAGADO'">
+                    {{ estadoLabel(p.estado) }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  <!-- Card 3: Beneficios -->
   <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
     <div class="flex items-center gap-2 mb-5">
       <svg class="h-5 w-5 text-[#0051ff]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -98,18 +148,151 @@
     </div>
   </div>
 
-  <!-- Card 3: CTA -->
+  <!-- Card 4: Simulador -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+    <div class="flex items-center gap-2 mb-5">
+      <svg class="h-5 w-5 text-[#ff7800]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+      </svg>
+      <h3 class="text-lg font-bold text-[#002a8d]">Simulador de Cuota</h3>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Monto</label>
+        <input type="number" [value]="montoSimulacion()" (input)="montoSimulacion.set(+$any($event.target).value)"
+               class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0051ff] outline-none text-sm" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Plazo (meses)</label>
+        <input type="number" [value]="plazoSimulacion()" (input)="plazoSimulacion.set(+$any($event.target).value)"
+               class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0051ff] outline-none text-sm" />
+      </div>
+      <div class="flex items-end">
+        <bcp-button variant="outline-gray" size="full" (click)="simularCuota()">Simular</bcp-button>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700 mb-1">Razón de la solicitud *</label>
+      <textarea rows="3" [value]="razon()" (input)="razon.set($any($event.target).value)"
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0051ff] outline-none text-sm resize-none"
+                placeholder="Ej.: Compra de laptop para trabajo"></textarea>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700 mb-1">Documentos de respaldo (opcional)</label>
+      <input type="file" accept=".pdf,.jpg,.jpeg,.png" multiple (change)="onSeleccionarDocumentos($event)"
+             class="block w-full text-sm text-[#8a99af] file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-[#0051ff] hover:file:bg-blue-100 hover:cursor-pointer" />
+      <p class="text-xs text-[#8a99af] mt-1">PDF, JPG o PNG — máximo 10MB por archivo</p>
+      @if (documentos().length > 0) {
+        <ul class="mt-3 space-y-2">
+          @for (doc of documentos(); track $index) {
+            <li class="flex items-center justify-between gap-2 bg-gray-50 border border-gray-100 rounded-lg px-3 py-2 text-sm">
+              <span class="text-[#5c697a] truncate">{{ doc.name }}</span>
+              <button (click)="quitarDocumento($index)" class="text-red-500 hover:text-red-700 hover:cursor-pointer text-xs font-medium">Quitar</button>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+
+    @if (resultadoSimulacion(); as r) {
+      <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm flex items-center gap-3">
+        <svg class="h-5 w-5 text-[#0051ff] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span class="text-[#002a8d]">Cuota mensual estimada: <strong>{{ r }}</strong></span>
+      </div>
+    }
+  </div>
+
+  <!-- Card 5: CTA -->
   <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
     <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
       <div>
         <h3 class="text-lg font-bold text-[#002a8d]">¿Listo para solicitar?</h3>
-        <p class="text-sm text-[#5c697a] mt-1">Simula tu cuota o inicia tu solicitud ahora</p>
+        <p class="text-sm text-[#5c697a] mt-1">Inicia tu solicitud de préstamo ahora</p>
       </div>
-      <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-        <bcp-button variant="outline-gray" size="md">Simular Cuota</bcp-button>
-        <bcp-button variant="primary" size="md">Solicitar Préstamo</bcp-button>
+      <div class="w-full sm:w-auto">
+        @if (error()) {
+          <bcp-alert type="error" class="mb-3 block">{{ error() }}</bcp-alert>
+        }
+        <bcp-button variant="primary" size="md" (click)="solicitarPrestamo()">
+          Solicitar Préstamo
+        </bcp-button>
       </div>
     </div>
     <p class="text-xs text-[#8a99af] mt-4 text-center sm:text-left">TCEA: 18.5% — Consulta tarifario en agencias y bcp.com.pe</p>
   </div>
 </div>
+
+@if (modalAbierto()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" (click)="cerrarModal()">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-bold text-[#002a8d]">Confirmar solicitud</h3>
+          <button (click)="cerrarModal()" class="text-[#8a99af] hover:text-[#5c697a] hover:cursor-pointer transition-colors">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        @if (solicitudExitosa()) {
+          <bcp-alert type="success">Tu solicitud fue enviada correctamente. Un asesor la revisará.</bcp-alert>
+          <div class="mt-6 flex justify-end">
+            <bcp-button variant="primary" size="md" (click)="cerrarModal()">Entendido</bcp-button>
+          </div>
+        } @else {
+          @if (error()) {
+            <bcp-alert type="error" class="mb-4 block">{{ error() }}</bcp-alert>
+          }
+
+          <div class="space-y-4 mb-6">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+              <p class="text-sm text-[#5c697a]">Monto</p>
+              <p class="font-semibold text-[#002a8d] font-mono">{{ formatMonto(montoSimulacion()) }}</p>
+            </div>
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+              <p class="text-sm text-[#5c697a]">Plazo</p>
+              <p class="font-semibold text-[#002a8d]">{{ plazoSimulacion() }} meses</p>
+            </div>
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+              <p class="text-sm text-[#5c697a]">Cuota mensual estimada</p>
+              <p class="font-semibold text-[#ff7800] font-mono">{{ cuotaEstimada() ?? '—' }}</p>
+            </div>
+            <div class="flex justify-between items-start border-b border-gray-100 pb-3">
+              <p class="text-sm text-[#5c697a]">Razón</p>
+              <p class="font-medium text-[#002a8d] text-right max-w-[60%]">{{ razon() }}</p>
+            </div>
+            <div class="flex justify-between items-start">
+              <p class="text-sm text-[#5c697a]">Documentos</p>
+              <p class="font-medium text-[#002a8d] text-right">
+                @if (documentos().length === 0) {
+                  Ninguno
+                } @else {
+                  {{ documentos().length }} adjunto(s)
+                  <ul class="text-xs text-[#8a99af] mt-1 space-y-0.5">
+                    @for (doc of documentos(); track $index) {
+                      <li>{{ doc.name }}</li>
+                    }
+                  </ul>
+                }
+              </p>
+            </div>
+          </div>
+
+          <p class="text-xs text-[#8a99af] mb-4">Sujeto a evaluación crediticia.</p>
+
+          <div class="flex justify-end gap-3">
+            <bcp-button variant="outline-gray" size="md" (click)="cerrarModal()" [disabled]="enviando()">Cancelar</bcp-button>
+            <bcp-button variant="primary" size="md" (click)="confirmarSolicitud()" [loading]="enviando()" [disabled]="enviando()">
+              {{ enviando() ? 'Enviando...' : 'Confirmar Solicitud' }}
+            </bcp-button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

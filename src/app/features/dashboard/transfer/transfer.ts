@@ -1,9 +1,9 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { BcpButton, BcpAlert } from '../../../shared/ui';
-import { CuentaService, DashboardService, type DetalleCuenta } from '../../../core';
+import { CuentaService, DashboardService, type DetalleCuenta, type ConfirmarTransferenciaDTO, type HistorialTransferencia } from '../../../core';
 
 @Component({
   selector: 'app-transfer',
@@ -11,17 +11,41 @@ import { CuentaService, DashboardService, type DetalleCuenta } from '../../../co
   templateUrl: './transfer.html',
   styleUrl: './transfer.css',
 })
-export class Transfer {
+export class Transfer implements OnInit {
   private cuentaService = inject(CuentaService);
   private dashboardService = inject(DashboardService);
 
   protected data = this.dashboardService.data;
 
+  ngOnInit() {
+    this.dashboardService.getDashboard().subscribe(() => this.cargarHistorialTransferencias());
+  }
+
+  protected transferencias = signal<HistorialTransferencia[]>([]);
+  protected historialLoading = signal(false);
+  protected historialError = signal('');
+
+  protected cargarHistorialTransferencias(): void {
+    const dni = this.data()?.informacionUsuario?.dni;
+    if (!dni) return;
+    this.historialLoading.set(true);
+    this.historialError.set('');
+    this.cuentaService.getHistorialTransferencias(dni).subscribe({
+      next: (res) => {
+        this.transferencias.set(res.data ?? []);
+        this.historialLoading.set(false);
+      },
+      error: () => {
+        this.historialLoading.set(false);
+        this.historialError.set('Error al cargar las últimas transferencias');
+      },
+    });
+  }
+
   cuentaOrigenId = signal<number | null>(null);
   cuentaDestino = '';
   monto = '';
   otp = '';
-  transactionId = signal<string | null>(null);
   step: 'form' | 'otp' | 'success' = 'form';
   loading = signal(false);
   error = signal('');
@@ -80,23 +104,56 @@ export class Transfer {
     return map[tipo] ?? tipo;
   }
 
-  protected isSelectedCuenta(id: number): boolean {
-    return this.cuentaDestino === String(id);
+  protected isSelectedCuenta(numeroCuenta: string): boolean {
+    return this.cuentaDestino === numeroCuenta;
   }
 
   protected formatCuenta(numero: string): string {
     return numero.length >= 4 ? '•••• ' + numero.slice(-4) : numero;
   }
 
+  protected tipoTransferenciaLabel(tipo: string): string {
+    return tipo?.toUpperCase() === 'RETIRO' ? 'Transferencia enviada' : 'Transferencia recibida';
+  }
+
+  protected tipoSigno(tipo: string): string {
+    return tipo?.toUpperCase() === 'RETIRO' ? '-' : '+';
+  }
+
+  protected formatFecha(fecha: string): string {
+    if (!fecha) return '';
+    return new Date(fecha).toLocaleDateString('es-PE');
+  }
+
   iniciarTransferencia() {
+    const origen = this.origenSeleccionado();
+    if (!origen) {
+      this.error.set('Selecciona la cuenta de origen');
+      return;
+    }
+    const cuentaDestino = this.cuentaDestino.trim();
+    if (!cuentaDestino) {
+      this.error.set('Ingresa la cuenta destino');
+      return;
+    }
+    if (cuentaDestino === origen.numeroCuenta) {
+      this.error.set('La cuenta de origen y destino no pueden ser la misma');
+      return;
+    }
     const montoNum = Number(this.monto);
-    if (!this.cuentaOrigenId() || !this.cuentaDestino || montoNum <= 0) return;
+    if (!Number.isFinite(montoNum) || montoNum <= 0) {
+      this.error.set('Ingresa un monto válido');
+      return;
+    }
+    if (montoNum > origen.saldo) {
+      this.error.set('Saldo insuficiente');
+      return;
+    }
     this.loading.set(true);
     this.error.set('');
-    this.cuentaService.iniciarTransferencia(this.cuentaOrigenId()!, { idCuentaDestino: +this.cuentaDestino, monto: montoNum }).subscribe({
-      next: (res: any) => {
+    this.cuentaService.iniciarTransferencia(origen.idCuenta, { numeroCuentaDestino: cuentaDestino, monto: montoNum }).subscribe({
+      next: () => {
         this.loading.set(false);
-        this.transactionId.set(res.data?.idTransaccion ?? null);
         this.step = 'otp';
       },
       error: (err) => {
@@ -107,18 +164,20 @@ export class Transfer {
   }
 
   selectCuentaRapida(cuenta: DetalleCuenta) {
-    this.cuentaDestino = String(cuenta.idCuenta);
+    this.cuentaDestino = cuenta.numeroCuenta;
   }
 
   confirmarTransferencia() {
     if (!this.otp) return;
     this.loading.set(true);
     this.error.set('');
-    this.cuentaService.confirmarTransferencia({ idTransaccion: this.transactionId()!, otp: this.otp } as any).subscribe({
+    const dto: ConfirmarTransferenciaDTO = { dni: this.data()?.informacionUsuario?.dni ?? '', codigoOTP: this.otp };
+    this.cuentaService.confirmarTransferencia(dto).subscribe({
       next: () => {
         this.loading.set(false);
         this.step = 'success';
         this.dashboardService.refresh();
+        this.cargarHistorialTransferencias();
       },
       error: (err) => {
         this.loading.set(false);
@@ -129,10 +188,10 @@ export class Transfer {
 
   reset() {
     this.step = 'form';
+    this.cuentaOrigenId.set(null);
     this.cuentaDestino = '';
     this.monto = '';
     this.otp = '';
-    this.transactionId.set(null);
     this.error.set('');
   }
 }

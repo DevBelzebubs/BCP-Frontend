@@ -1,5 +1,5 @@
 <button [attr.type]="type()" [disabled]="isDisabled()" (click)="clicked.emit()"
-        class="inline-flex items-center justify-center gap-2 font-bold transition-all active:scale-[0.98] whitespace-nowrap"
+        class="inline-flex items-center justify-center gap-2 font-bold transition-all active:scale-[0.98] whitespace-nowrap hover:cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
         [class]="variantClass() + ' ' + sizeClass()">
   @if (loading()) {
     <bcp-spinner size="sm" color="white" />

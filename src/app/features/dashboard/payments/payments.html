@@ -30,10 +30,9 @@
     </div>
   </div>
 
-  <bcp-pending-payments [pagos]="data()?.pagosPendientes ?? []" />
-
+  <bcp-pending-payments [pagos]="data()?.pagosPendientes ?? []" (pagar)="handlePagar($event)" />
   <!-- Add service card -->
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6">
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 mt-4">
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
       <div>
         <h3 class="font-bold text-[#002a8d]">¿Necesitas pagar otro servicio?</h3>
@@ -64,12 +63,118 @@
       </div>
     </div>
 
-    <div class="flex flex-col items-center justify-center py-10 px-5">
-      <svg class="h-12 w-12 text-[#8a99af] mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-      <p class="text-[#5c697a] font-medium">No hay historial de pagos</p>
-      <p class="text-[#8a99af] text-sm mt-1">Los pagos que realices aparecerán aquí</p>
-    </div>
+    @if (historialPagosLoading()) {
+      <div class="flex items-center justify-center py-10 px-5 text-sm text-[#8a99af]">Cargando historial...</div>
+    } @else if (pagosRealizados().length > 0) {
+      <div class="divide-y divide-gray-100">
+        @for (pago of pagosRealizados(); track pago.idPago) {
+          <div class="flex items-center justify-between px-5 sm:px-6 py-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center shrink-0">
+                <svg class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-[#002a8d]">{{ pago.nombreServicio }}</p>
+                <p class="text-xs text-[#8a99af]">{{ formatFecha(pago.fecha) }}</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-sm font-bold text-[#002a8d]">{{ formatMonto(pago.monto) }}</p>
+              <p class="text-xs text-green-600">Pagado</p>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="flex flex-col items-center justify-center py-10 px-5">
+        <svg class="h-12 w-12 text-[#8a99af] mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p class="text-[#5c697a] font-medium">No hay historial de pagos</p>
+        <p class="text-[#8a99af] text-sm mt-1">Los pagos que realices aparecerán aquí</p>
+      </div>
+    }
+    @if (historialPagosError()) {
+      <p class="px-5 sm:px-6 pb-4 text-sm text-red-500">{{ historialPagosError() }}</p>
+    }
   </div>
 </div>
+
+@if (pagoSeleccionado(); as pago) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" (click)="cerrarModal()">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-bold text-[#002a8d]">Pagar {{ pago.nombreServicio }}</h3>
+          <button (click)="cerrarModal()" class="text-[#8a99af] hover:text-[#5c697a] hover:cursor-pointer transition-colors">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <p class="text-sm text-[#5c697a] mb-1">Monto a pagar</p>
+        <p class="text-2xl font-bold text-[#ff7800] mb-6">{{ formatMonto(pago.montoPendiente) }}</p>
+
+        @if (pagoExitoso()) {
+          <bcp-alert type="success">Pago realizado con éxito</bcp-alert>
+        }
+        @if (pagoError()) {
+          <bcp-alert type="error">{{ pagoError() }}</bcp-alert>
+        }
+
+        <p class="text-sm font-semibold text-[#002a8d] mb-3">Selecciona una cuenta</p>
+
+        @if (cuentas().length === 0) {
+          <p class="text-sm text-[#8a99af]">No tienes cuentas disponibles</p>
+        }
+
+        <div class="space-y-3 mb-6">
+          @for (cuenta of cuentas(); track cuenta.idCuenta) {
+            @let saldoSuficiente = getSaldoSuficiente(cuenta, pago.montoPendiente);
+            <div
+              class="border-2 rounded-xl p-4 cursor-pointer transition-all"
+              [class]="cuentaSeleccionadaId() === cuenta.idCuenta ? 'border-[#ff7800] bg-orange-50' : (saldoSuficiente ? 'border-gray-200 hover:border-gray-300' : 'border-gray-100 opacity-50 cursor-not-allowed')"
+              (click)="saldoSuficiente ? cuentaSeleccionadaId.set(cuenta.idCuenta) : null"
+            >
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-[#002a8d]/10 flex items-center justify-center">
+                    <svg class="h-5 w-5 text-[#002a8d]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="text-sm font-semibold text-[#002a8d]">{{ getTipoLabel(cuenta.tipo) }}</p>
+                    <p class="text-xs text-[#8a99af] font-mono">{{ cuenta.numeroCuenta }}</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-sm font-bold text-[#002a8d]">{{ formatMonto(cuenta.saldo) }}</p>
+                  @if (!saldoSuficiente) {
+                    <p class="text-xs text-red-500">Saldo insuficiente</p>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="flex gap-3">
+          <bcp-button variant="outline-gray" size="md" (clicked)="cerrarModal()">Cancelar</bcp-button>
+          <bcp-button
+            variant="primary"
+            size="md"
+            [disabled]="!cuentaSeleccionadaId() || pagando()"
+            [loading]="pagando()"
+            (clicked)="confirmarPago()"
+          >
+            Pagar {{ formatMonto(pago.montoPendiente) }}
+          </bcp-button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

@@ -1,47 +1,108 @@
-<bcp-card padding="md" hover="none" rounded="2xl" shadow="sm">
-  <div class="flex items-start justify-between cursor-pointer" (click)="toggleMovimientos()">
-    <div class="flex-1 min-w-0">
-      <div class="flex items-center gap-2 mb-1">
-        <bcp-badge [variant]="badgeVariant()" [pill]="true">{{ tipoLabel() }}</bcp-badge>
-      </div>
-      <p class="text-[#5c697a] text-sm font-mono">{{ numeroMasked() }}</p>
-      <p class="text-2xl font-bold text-[#002a8d] mt-1">{{ saldoFormatted() }}</p>
-    </div>
-    <div class="flex items-center gap-2 text-[#0051ff]">
-      <span class="text-sm font-medium">
-        {{ expanded() ? 'Ocultar' : 'Ver movimientos' }}
-      </span>
-      <svg class="h-5 w-5 transition-transform duration-300" [class.rotate-180]="expanded()" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+<div class="cc-card relative overflow-hidden rounded-[20px] p-5 text-white shadow-lg sm:p-6 {{ gradClass() }}" (click)="toggleMovimientos()">
+  <div class="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-2xl"></div>
+  <div class="pointer-events-none absolute -bottom-24 -left-12 h-64 w-64 rounded-full bg-black/20 blur-2xl"></div>
+  <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/20"></div>
+  <div class="card-shine pointer-events-none absolute inset-0"></div>
+
+  <div class="relative mb-6 flex items-start justify-between">
+    <div class="flex items-center gap-3">
+      <svg class="h-9 w-12 shrink-0" viewBox="0 0 44 32" aria-hidden="true">
+        <rect width="44" height="32" rx="5" fill="#f5b301"></rect>
+        <path d="M14 0v32M29 0v32M0 10h44M0 21h44" stroke="#8a6d00" stroke-width="1.5" opacity="0.55"></path>
       </svg>
+      <svg class="h-7 w-7 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <path stroke-linecap="round" d="M7.5 7.2a6.4 6.4 0 0 1 0 9.6"></path>
+        <path stroke-linecap="round" d="M10.6 5.4a9.9 9.9 0 0 1 0 13.2"></path>
+        <path stroke-linecap="round" d="M4.4 9.4a3.6 3.6 0 0 1 0 5.2"></path>
+      </svg>
+    </div>
+    <div class="text-right">
+      <p class="text-xl font-black leading-none tracking-[0.15em]">BCP</p>
+      <p class="mt-1 text-[9px] uppercase tracking-[0.22em] text-white/70">Banco de Crédito</p>
+    </div>
+  </div>
+
+  <div class="relative mb-6 flex items-center justify-between gap-3">
+    <p class="min-h-[1.75rem] font-mono text-lg font-semibold tracking-wider sm:text-xl">{{ numeroDisplay() }}</p>
+    <button type="button" (click)="toggleNumero($event)"
+            class="shrink-0 rounded-full bg-white/10 p-2 text-white/90 transition-colors hover:bg-white/20"
+            [attr.aria-label]="numeroVisible() ? 'Ocultar número' : 'Ver número'">
+      @if (numeroVisible()) {
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+        </svg>
+      } @else {
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+      }
+    </button>
+  </div>
+
+  <div class="relative mb-6 flex items-end justify-between gap-3">
+    <div>
+      <p class="text-[10px] uppercase tracking-[0.18em] text-white/70">Saldo Disponible</p>
+      <p class="mt-1 font-mono text-2xl font-bold sm:text-3xl">{{ saldoDisplay() }}</p>
+    </div>
+    <button type="button" (click)="toggleSaldo($event)"
+            class="shrink-0 rounded-full bg-white/10 p-2 text-white/90 transition-colors hover:bg-white/20"
+            [attr.aria-label]="saldoVisible() ? 'Ocultar saldo' : 'Ver saldo'">
+      @if (saldoVisible()) {
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+        </svg>
+      } @else {
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+      }
+    </button>
+  </div>
+
+  <div class="relative flex items-end justify-between gap-3">
+    <div class="min-w-0">
+      <p class="text-[10px] uppercase tracking-[0.18em] text-white/70">Titular</p>
+      <p class="mt-1 truncate text-sm font-semibold uppercase tracking-wider">{{ titular() || 'Cliente' }}</p>
+    </div>
+    <div class="flex shrink-0 items-center gap-2">
+      <bcp-badge variant="white" [pill]="true">{{ tipoLabel() }}</bcp-badge>
+      <button type="button" (click)="toggleMovimientos($event)"
+              class="shrink-0 rounded-full bg-white/10 p-2 text-white/90 transition-colors hover:bg-white/20"
+              [attr.aria-label]="expanded() ? 'Ocultar movimientos' : 'Ver movimientos'">
+        <svg class="h-4 w-4 transition-transform duration-300" [class.rotate-180]="expanded()" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
     </div>
   </div>
 
   @if (expanded()) {
-    <div class="mt-4 border-t border-gray-100 pt-4 space-y-3">
+    <div class="relative mt-5 rounded-2xl bg-white p-4 text-gray-900 shadow-inner" (click)="$event.stopPropagation()">
       @if (movimientos().length === 0) {
-        <p class="text-[#8a99af] text-sm text-center py-4">No hay movimientos recientes</p>
+        <p class="py-4 text-center text-sm text-[#8a99af]">No hay movimientos recientes</p>
       }
       @for (mov of movimientos(); track mov.id) {
         <div class="flex items-center justify-between py-2">
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full"
                  [class.bg-green-100]="mov.tipo === 'DEPOSITO'"
                  [class.bg-red-100]="mov.tipo === 'RETIRO'"
                  [class.bg-blue-100]="mov.tipo === 'TRANSFERENCIA'">
               @switch (mov.tipo) {
                 @case ('DEPOSITO') {
-                  <svg class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <svg class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                   </svg>
                 }
                 @case ('RETIRO') {
-                  <svg class="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <svg class="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
                   </svg>
                 }
                 @case ('TRANSFERENCIA') {
-                  <svg class="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <svg class="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                   </svg>
                 }
@@ -60,8 +121,7 @@
           </span>
         </div>
       }
+      <ng-content select="[card-actions]" />
     </div>
   }
-
-  <ng-content select="[card-actions]" />
-</bcp-card>
+</div>
